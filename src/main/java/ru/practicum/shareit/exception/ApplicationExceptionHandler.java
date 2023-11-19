@@ -59,7 +59,7 @@ public class ApplicationExceptionHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
-    public ErrorResponse handleAlreadyExistsException(EmailAlreadyExistsException e) {
+    public ErrorResponse handleEmailAlreadyExistsException(EmailAlreadyExistsException e) {
         String errorMessage = e.getMessage();
         log.error("Already Exists Exception = {}", errorMessage);
         return new ErrorResponse("EmailAlreadyExistsException", errorMessage);
