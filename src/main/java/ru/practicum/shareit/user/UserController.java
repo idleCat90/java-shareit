@@ -43,6 +43,7 @@ public class UserController {
         log.info("GET \"/users/" + id + "\"");
         return userService.getById(id);
     }
+
     @PatchMapping("/{id}")
     public UserDto update(@PathVariable Long id,
                           @RequestBody @Validated(OnUpdate.class) UserDto user) {
