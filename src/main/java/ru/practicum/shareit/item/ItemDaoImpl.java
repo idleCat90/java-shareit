@@ -43,7 +43,7 @@ public class ItemDaoImpl implements ItemDao {
         long ownerId = item.getOwner().getId();
         List<Item> ownerItems = ownerIdItems.getOrDefault(ownerId, new ArrayList<>());
 
-        ownerItems.remove(item);  // works if equals and hashCode by ID only
+        ownerItems.remove(item);
         ownerItems.add(item);
         ownerIdItems.put(ownerId, ownerItems);
 
