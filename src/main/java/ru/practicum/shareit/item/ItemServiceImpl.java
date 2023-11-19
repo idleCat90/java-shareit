@@ -40,8 +40,7 @@ public class ItemServiceImpl implements ItemService {
 
         Item item = itemDao.getByItemId(itemId)
                 .orElseThrow(() -> new NotFoundException("Item not found by id: " + itemId));
-        // Не понимаю почему проверку "владелец ли переданный пользователь данного объекта" нужно перенести в Dao,
-        // а проверка "есть ли вообще данный пользователь в базе" остается в сервисе.
+
         if (!itemDao.isOwnerOfItem(ownerId, itemId)) {
             throw new NotFoundException("User with id " + ownerId + " doesn't have item with id " + itemId);
         }
