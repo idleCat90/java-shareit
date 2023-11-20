@@ -61,6 +61,7 @@ public class ItemDaoImpl implements ItemDao {
                 idItems.get(itemId));
     }
 
+    @Override
     public List<Item> search(String text) {
         List<Item> searchResult = new ArrayList<>();
         for (Item item : idItems.values()) {
