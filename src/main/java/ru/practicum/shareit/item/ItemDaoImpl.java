@@ -7,17 +7,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Repository
 public class ItemDaoImpl implements ItemDao {
-    HashMap<Long, Item> idItems;
-    HashMap<Long, List<Item>> ownerIdItems;
+    private HashMap<Long, Item> idItems;
+    private HashMap<Long, List<Item>> ownerIdItems;
 
     long idCounter = 0L;
 
     public ItemDaoImpl() {
-        this.idItems = new HashMap<>();
-        this.ownerIdItems = new HashMap<>();
+        idItems = new HashMap<>();
+        ownerIdItems = new HashMap<>();
     }
 
     private long getNewId() {
@@ -61,14 +62,13 @@ public class ItemDaoImpl implements ItemDao {
                 idItems.get(itemId));
     }
 
+    @Override
     public List<Item> search(String text) {
-        List<Item> searchResult = new ArrayList<>();
-        for (Item item : idItems.values()) {
-            if (itemContainsSubstring(item, text)) {
-                searchResult.add(item);
-            }
-        }
-        return searchResult;
+        return idItems.values().stream()
+                .filter(Item::getAvailable)
+                .filter(item -> item.getName().toLowerCase().contains(text.toLowerCase()) ||
+                        item.getDescription().toLowerCase().contains(text.toLowerCase()))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -87,15 +87,5 @@ public class ItemDaoImpl implements ItemDao {
         List<Item> ownerItems = ownerIdItems.getOrDefault(ownerId, new ArrayList<>());
         Item item = idItems.get(itemId);
         return ownerItems.contains(item);
-    }
-
-    private boolean itemContainsSubstring(Item item, String text) {
-        String name = item.getName()
-                .toLowerCase();
-        String description = item.getDescription()
-                .toLowerCase();
-        Boolean available = item.getAvailable();
-
-        return (!text.isBlank() && (name.contains(text) || description.contains(text)) && available);
     }
 }
