@@ -10,14 +10,14 @@ import java.util.Optional;
 
 @Repository
 public class ItemDaoImpl implements ItemDao {
-    HashMap<Long, Item> idItems;
-    HashMap<Long, List<Item>> ownerIdItems;
+    private HashMap<Long, Item> idItems;
+    private HashMap<Long, List<Item>> ownerIdItems;
 
     long idCounter = 0L;
 
     public ItemDaoImpl() {
-        this.idItems = new HashMap<>();
-        this.ownerIdItems = new HashMap<>();
+        idItems = new HashMap<>();
+        ownerIdItems = new HashMap<>();
     }
 
     private long getNewId() {
@@ -64,7 +64,7 @@ public class ItemDaoImpl implements ItemDao {
     public List<Item> search(String text) {
         List<Item> searchResult = new ArrayList<>();
         for (Item item : idItems.values()) {
-            if (itemContainsSubstring(item, text)) {
+            if (item.getAvailable() && itemContainsSubstring(item, text)) {
                 searchResult.add(item);
             }
         }
@@ -94,8 +94,7 @@ public class ItemDaoImpl implements ItemDao {
                 .toLowerCase();
         String description = item.getDescription()
                 .toLowerCase();
-        Boolean available = item.getAvailable();
 
-        return (!text.isBlank() && (name.contains(text) || description.contains(text)) && available);
+        return (!text.isBlank() && (name.contains(text) || description.contains(text)));
     }
 }
