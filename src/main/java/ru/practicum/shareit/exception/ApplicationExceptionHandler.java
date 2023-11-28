@@ -15,54 +15,32 @@ import java.io.StringWriter;
 @RestControllerAdvice
 @Slf4j
 public class ApplicationExceptionHandler {
-    @ExceptionHandler
+    @ExceptionHandler({MethodArgumentNotValidException.class, ValidationException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleValidateException(MethodArgumentNotValidException e) {
-        String errorMessage = e.getMessage();
-        log.error("Method Argument Not Valid Exception = {}", errorMessage);
-        return new ErrorResponse("MethodArgumentNotValidException", errorMessage);
+    public ErrorResponse handleValidationException(final Exception e) {
+        log.error("STATUS 400: {}", e.getMessage(), e);
+        return new ErrorResponse(e.getMessage());
     }
 
-    @ExceptionHandler
+    @ExceptionHandler({MissingRequestHeaderException.class, HttpMessageNotReadableException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleMissingRequestHeaderException(MissingRequestHeaderException e) {
-        String errorMessage = e.getMessage();
-        log.error("Missing Request Header Exception = {}", errorMessage);
-        return new ErrorResponse("MissingRequestHeaderException", errorMessage);
+    public ErrorResponse handleBadRequest(final Exception e) {
+        log.error("STATUS 400: {}", e.getMessage());
+        return new ErrorResponse(e.getMessage());
     }
-
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
-        String errorMessage = e.getMessage();
-        log.error("Http Message Not Readable Exception = {}", errorMessage);
-        return new ErrorResponse("HttpMessageNotReadableException", errorMessage);
-    }
-
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponse handleValidateException(NotFoundException e) {
-        String errorMessage = e.getMessage();
-        log.error("NotFoundException = {}", errorMessage);
-        return new ErrorResponse("NotFoundException", errorMessage);
-    }
-
-
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleValidateException(ValidateException e) {
-        String errorMessage = e.getMessage();
-        log.error("Validate Exception = {}", errorMessage);
-        return new ErrorResponse("ValidateException", errorMessage);
+    public ErrorResponse handleNotFoundException(final NotFoundException e) {
+        log.error("STATUS 404: {}", e.getMessage(), e);
+        return new ErrorResponse(e.getMessage());
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
     public ErrorResponse handleEmailAlreadyExistsException(EmailAlreadyExistsException e) {
-        String errorMessage = e.getMessage();
-        log.error("Already Exists Exception = {}", errorMessage);
-        return new ErrorResponse("EmailAlreadyExistsException", errorMessage);
+        log.error("STATUS 409: {}", e.getMessage(), e);
+        return new ErrorResponse(e.getMessage());
     }
 
     @ExceptionHandler

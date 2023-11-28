@@ -1,7 +1,10 @@
 package ru.practicum.shareit.exception;
 
+import lombok.Getter;
+
+@Getter
 public class ErrorResponse {
-    private final String error;
+    private String error;
     private final String message;
     private String stackTraceElement;
 
@@ -16,16 +19,8 @@ public class ErrorResponse {
         this.message = message;
     }
 
-    public String getError() {
-        return error;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public String getStackTraceElement() {
-        return stackTraceElement;
+    public ErrorResponse(String message) {
+        this.message = message;
     }
 
     public void setStackTraceElement(String stackTraceElement) {
