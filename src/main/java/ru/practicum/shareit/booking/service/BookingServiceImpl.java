@@ -13,7 +13,6 @@ import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.item.repository.CommentRepository;
 import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.UserMapper;
@@ -46,7 +45,7 @@ public class BookingServiceImpl implements BookingService {
     @Transactional
     public BookingRespDto update(Long userId, Long bookingId, Boolean approved) {
         Booking booking = findAndValidate(userId, bookingId, 1);
-//        assert booking != null;
+        assert booking != null;
         BookingStatus status = approved ? BookingStatus.APPROVED : BookingStatus.REJECTED;
         booking.setStatus(status);
         return BookingMapper.toBookingRespDto(bookingRepository.save(booking));
