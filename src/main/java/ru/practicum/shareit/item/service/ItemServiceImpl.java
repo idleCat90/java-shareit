@@ -8,7 +8,7 @@ import ru.practicum.shareit.booking.dto.BookingRespDto;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.BookingStatus;
 import ru.practicum.shareit.booking.repository.BookingRepository;
-import ru.practicum.shareit.exception.NoUserBookingsException;
+import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.dto.CommentReqDto;
 import ru.practicum.shareit.item.dto.CommentRespDto;
@@ -146,7 +146,7 @@ public class ItemServiceImpl implements ItemService {
         List<Booking> userBookings = bookingRepository.findAllByUserBookings(userId, itemId, LocalDateTime.now());
 
         if (userBookings.isEmpty()) {
-            throw new NoUserBookingsException("User with id=" + userId + " has no bookings for item with id=" + itemId);
+            throw new ValidationException("User with id=" + userId + " has no bookings for item with id=" + itemId);
         }
 
         return CommentMapper.toCommentRespDto(commentRepository
