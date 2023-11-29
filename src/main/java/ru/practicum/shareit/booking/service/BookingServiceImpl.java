@@ -146,7 +146,7 @@ public class BookingServiceImpl implements BookingService {
         switch (caseNum) {
             case 1:
                 if (!booking.getItem().getOwner().getId().equals(userId)) {
-                    throw new NotFoundException("User with id=" + userId+ " is not the owner");
+                    throw new NotFoundException("User with id=" + userId + " is not the owner");
                 }
                 if (!booking.getStatus().equals(BookingStatus.WAITING)) {
                     throw new ValidationException("Booking has WAITING status");
