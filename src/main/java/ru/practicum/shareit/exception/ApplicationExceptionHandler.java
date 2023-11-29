@@ -9,9 +9,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-
 @RestControllerAdvice
 @Slf4j
 public class ApplicationExceptionHandler {
@@ -38,7 +35,7 @@ public class ApplicationExceptionHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
-    public ErrorResponse handleEmailAlreadyExistsException(final EmailAlreadyExistsException e) {
+    public ErrorResponse handleEmailAlreadyExistsException(final DuplicateEmailException e) {
         log.error("STATUS 409: {}", e.getMessage());
         return new ErrorResponse(e.getMessage());
     }
