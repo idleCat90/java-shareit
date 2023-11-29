@@ -123,8 +123,9 @@ public class BookingServiceImpl implements BookingService {
                         .map(BookingMapper::toBookingRespDto)
                         .collect(Collectors.toList());
             default:
-                throw new IllegalArgumentException("Unsupported state");
-        }    }
+                throw new IllegalArgumentException("Unknown state: UNSUPPORTED_STATUS");
+        }
+    }
 
     private void validateBooking(BookingReqDto bookingReqDto, User user, Item item) {
         if (!item.getAvailable()) {
@@ -147,7 +148,7 @@ public class BookingServiceImpl implements BookingService {
                 if (!booking.getItem().getOwner().getId().equals(userId)) {
                     throw new NotFoundException("User with id=" + userId+ " is not the owner");
                 }
-                if (booking.getStatus().equals(BookingStatus.WAITING)) {
+                if (!booking.getStatus().equals(BookingStatus.WAITING)) {
                     throw new ValidationException("Booking has WAITING status");
                 }
                 return booking;

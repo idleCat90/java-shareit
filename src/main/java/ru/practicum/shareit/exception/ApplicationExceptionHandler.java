@@ -18,7 +18,7 @@ public class ApplicationExceptionHandler {
     @ExceptionHandler({MethodArgumentNotValidException.class, ValidationException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleValidationException(final Exception e) {
-        log.error("STATUS 400: {}", e.getMessage(), e);
+        log.error("STATUS 400: {}", e.getMessage());
         return new ErrorResponse(e.getMessage());
     }
 
@@ -32,25 +32,21 @@ public class ApplicationExceptionHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleNotFoundException(final NotFoundException e) {
-        log.error("STATUS 404: {}", e.getMessage(), e);
+        log.error("STATUS 404: {}", e.getMessage());
         return new ErrorResponse(e.getMessage());
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
-    public ErrorResponse handleEmailAlreadyExistsException(EmailAlreadyExistsException e) {
-        log.error("STATUS 409: {}", e.getMessage(), e);
+    public ErrorResponse handleEmailAlreadyExistsException(final EmailAlreadyExistsException e) {
+        log.error("STATUS 409: {}", e.getMessage());
         return new ErrorResponse(e.getMessage());
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ErrorResponse handleUndefinedException(Exception e) {
-        StringWriter stringWriter = new StringWriter();
-        e.printStackTrace(new PrintWriter(stringWriter));
-        String errorMessage = e.getMessage();
-        String stackTrace = stringWriter.toString();
-        log.error("Exception = {}", errorMessage, e);
-        return new ErrorResponse(e.toString(), errorMessage, stackTrace);
+    public ErrorResponse handleUndefinedException(final Throwable e) {
+        log.error("STATUS 500: {}", e.getMessage());
+        return new ErrorResponse(e.getMessage());
     }
 }

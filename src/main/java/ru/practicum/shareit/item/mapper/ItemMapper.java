@@ -11,12 +11,12 @@ import java.util.List;
 
 @UtilityClass
 public class ItemMapper {
-//    public ItemReqDto toItemReqDto(Item item) {
-//        return new ItemReqDto(
-//                item.getName(),
-//                item.getDescription(),
-//                item.getAvailable());
-//    }
+    public ItemReqDto toItemReqDto(Item item) {
+        return new ItemReqDto(
+                item.getName(),
+                item.getDescription(),
+                item.getAvailable());
+    }
 
     public ItemRespDto toItemRespDto(Item item) {
         return new ItemRespDto(
