@@ -12,18 +12,27 @@ import java.util.List;
 @UtilityClass
 public class ItemMapper {
     public ItemReqDto toItemReqDto(Item item) {
-        return new ItemReqDto(
+        ItemReqDto itemReqDto = new ItemReqDto(
                 item.getName(),
                 item.getDescription(),
                 item.getAvailable());
+        if (item.getRequest() != null) {
+            itemReqDto.setRequestId(item.getRequest().getId());
+        }
+        return itemReqDto;
     }
 
     public ItemRespDto toItemRespDto(Item item) {
-        return new ItemRespDto(
+        ItemRespDto itemRespDto = new ItemRespDto(
                 item.getId(),
                 item.getName(),
                 item.getDescription(),
                 item.getAvailable());
+
+        if (item.getRequest() != null) {
+            itemRespDto.setRequestId(item.getRequest().getId());
+        }
+        return itemRespDto;
     }
 
     public ItemRespDto toItemRespDto(Item item,

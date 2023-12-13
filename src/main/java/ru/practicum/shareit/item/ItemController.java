@@ -2,6 +2,7 @@ package ru.practicum.shareit.item;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.item.dto.CommentReqDto;
 import ru.practicum.shareit.item.dto.CommentRespDto;
@@ -10,12 +11,14 @@ import ru.practicum.shareit.item.dto.ItemRespDto;
 import ru.practicum.shareit.item.service.ItemService;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import java.util.List;
 
 @RestController
 @RequestMapping("/items")
 @RequiredArgsConstructor
 @Slf4j
+@Validated
 public class ItemController {
     public static final String USER_HEADER = "X-Sharer-User-Id";
     private final ItemService itemService;
@@ -43,16 +46,24 @@ public class ItemController {
     }
 
     @GetMapping
-    public List<ItemRespDto> findAll(@RequestHeader(USER_HEADER) Long userId) {
+    public List<ItemRespDto> findAll(@RequestHeader(USER_HEADER) Long userId,
+                                     @RequestParam(value = "from", defaultValue = "0")
+                                     @Min(0) Integer from,
+                                     @RequestParam(value = "size", defaultValue = "10")
+                                     @Min(1) Integer size) {
         log.info("GET \"/item/\", Headers:(X-Sharer-User-Id)={}", userId);
-        return itemService.findAll(userId);
+        return itemService.findAll(userId, from, size);
     }
 
     @GetMapping("/search")
     public List<ItemRespDto> search(@RequestHeader(USER_HEADER) Long userId,
-                                    @RequestParam(name = "text") String text) {
+                                    @RequestParam(name = "text") String text,
+                                    @RequestParam(value = "from", defaultValue = "0")
+                                    @Min(0) Integer from,
+                                    @RequestParam(value = "size", defaultValue = "10")
+                                    @Min(1) Integer size) {
         log.info("GET \"/item/search?text={}\", Headers:(X-Sharer-User-Id)={}", text, userId);
-        return itemService.search(userId, text);
+        return itemService.search(userId, text, from, size);
     }
 
     @PostMapping("/{itemId}/comment")
