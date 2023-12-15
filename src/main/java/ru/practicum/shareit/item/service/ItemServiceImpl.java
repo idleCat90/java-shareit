@@ -152,7 +152,7 @@ public class ItemServiceImpl implements ItemService {
         User user = UserMapper.toUser(userService.findById(userId));
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new NotFoundException("No item with id=" + itemId + " found"));
-        List<Booking> userBookings = bookingRepository.findAllByUserBookings(userId, itemId, LocalDateTime.now());
+        List<Booking> userBookings = bookingRepository.findAllBookingsByUserAndItemId(userId, itemId, LocalDateTime.now());
 
         if (userBookings.isEmpty()) {
             throw new ValidationException("User with id=" + userId + " has no bookings for item with id=" + itemId);

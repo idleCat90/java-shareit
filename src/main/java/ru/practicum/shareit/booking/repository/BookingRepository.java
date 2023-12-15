@@ -121,7 +121,7 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             "AND i.id = ?2 " +
             "AND b.status = 'APPROVED' " +
             "AND b.end_date < ?3 ", nativeQuery = true)
-    List<Booking> findAllByUserBookings(Long userId, Long itemId, LocalDateTime now);
+    List<Booking> findAllBookingsByUserAndItemId(Long userId, Long itemId, LocalDateTime now);
 
     List<Booking> findAllByItemInAndStatusOrderByStartAsc(List<Item> items, BookingStatus status);
 
