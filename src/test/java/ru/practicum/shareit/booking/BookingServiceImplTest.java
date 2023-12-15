@@ -195,6 +195,7 @@ public class BookingServiceImplTest {
 
         assertEquals("User with id=3 is not the booker or the owner", notFoundException.getMessage());
     }
+
     @Test
     void whenBookingIsValid_thenFindById() {
         BookingRespDto expectedBookingRespDto = BookingMapper.toBookingRespDto(booking);
