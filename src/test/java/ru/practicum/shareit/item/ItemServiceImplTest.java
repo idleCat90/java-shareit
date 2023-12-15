@@ -7,8 +7,6 @@ import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.BookingStatus;
@@ -108,42 +106,6 @@ public class ItemServiceImplTest {
             .status(BookingStatus.APPROVED)
             .start(LocalDateTime.now().minusDays(1L))
             .end(LocalDateTime.now().plusDays(1L))
-            .build();
-
-    private final Booking lastBooking = Booking.builder()
-            .id(2L)
-            .item(item)
-            .booker(user)
-            .status(BookingStatus.APPROVED)
-            .start(LocalDateTime.now().minusDays(2L))
-            .end(LocalDateTime.now().minusDays(1L))
-            .build();
-
-    private final Booking pastBooking = Booking.builder()
-            .id(3L)
-            .item(item)
-            .booker(user)
-            .status(BookingStatus.APPROVED)
-            .start(LocalDateTime.now().minusDays(10L))
-            .end(LocalDateTime.now().minusDays(9L))
-            .build();
-
-    private final Booking nextBooking = Booking.builder()
-            .id(4L)
-            .item(item)
-            .booker(user)
-            .status(BookingStatus.APPROVED)
-            .start(LocalDateTime.now().plusDays(1L))
-            .end(LocalDateTime.now().plusDays(2L))
-            .build();
-
-    private final Booking futureBooking = Booking.builder()
-            .id(5L)
-            .item(item)
-            .booker(user)
-            .status(BookingStatus.APPROVED)
-            .start(LocalDateTime.now().plusDays(10L))
-            .end(LocalDateTime.now().plusDays(20L))
             .build();
 
     @Test
