@@ -167,6 +167,16 @@ public class BookingServiceImplTest {
     }
 
     @Test
+    void whenUserIsNotOwner_thenUpdateThrowsNotFoundException() {
+        when(bookingRepository.findById(anyLong())).thenReturn(Optional.of(booking));
+
+        NotFoundException notFoundException = assertThrows(NotFoundException.class,
+                () -> bookingService.update(userDto.getId(), booking.getId(), true));
+
+        assertEquals(String.format("User with id=%s is not the owner", userDto.getId()), notFoundException.getMessage());
+    }
+
+    @Test
     void whenStatusNotWaiting_thenUpdateThrowsValidationException() {
         when(bookingRepository.findById(anyLong())).thenReturn(Optional.of(booking));
 
@@ -176,6 +186,15 @@ public class BookingServiceImplTest {
         assertEquals("Booking has no WAITING status", validationException.getMessage());
     }
 
+    @Test
+    void whenUserIsNotOwner_thenThrowNotFoundException() {
+        when(bookingRepository.findById(anyLong())).thenReturn(Optional.of(booking));
+
+        NotFoundException notFoundException = assertThrows(NotFoundException.class,
+                () -> bookingService.findByUserId(3L, booking.getId()));
+
+        assertEquals("User with id=3 is not the booker or the owner", notFoundException.getMessage());
+    }
     @Test
     void whenBookingIsValid_thenFindById() {
         BookingRespDto expectedBookingRespDto = BookingMapper.toBookingRespDto(booking);
@@ -194,16 +213,6 @@ public class BookingServiceImplTest {
                 () -> bookingService.findByUserId(1L, booking.getId()));
 
         assertEquals("Booking with id=" + booking.getId() + " not found", notFoundException.getMessage());
-    }
-
-    @Test
-    void whenUserIsNotOwner_thenThrowNotFoundException() {
-        when(bookingRepository.findById(anyLong())).thenReturn(Optional.of(booking));
-
-        NotFoundException notFoundException = assertThrows(NotFoundException.class,
-                () -> bookingService.findByUserId(3L, booking.getId()));
-
-        assertEquals("User with id=3 is not the booker or the owner", notFoundException.getMessage());
     }
 
     @Test
@@ -279,9 +288,13 @@ public class BookingServiceImplTest {
     }
 
     @Test
-    void whenBookingStateInvalid_thenThrowIllegalArgumentException() {
+    void whenBookingStateInvalid_thenFindAllThrowsIllegalArgumentException() {
         assertThrows(IllegalArgumentException.class,
                 () -> bookingService.findAll(user.getId(), "HELLO", 0, 10));
+    }
+
+    @Test
+    void whenBookingStateInvalid_thenFindAllByOwnerIdThrowsIllegalArgumentException() {
         assertThrows(IllegalArgumentException.class,
                 () -> bookingService.findAllByOwnerId(user.getId(), "HELLO", 0, 10));
     }

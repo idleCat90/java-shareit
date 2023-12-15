@@ -89,7 +89,7 @@ public class ItemServiceImpl implements ItemService {
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new NotFoundException("No item with id=" + itemId + " found"));
         ItemRespDto itemRespDto = ItemMapper.toItemRespDto(item);
-        itemRespDto.setComments(getAllItemComments(itemId));
+        itemRespDto.setComments(findAllItemComments(itemId));
         if (!item.getOwner().getId().equals(userId)) {
             return itemRespDto;
         }
@@ -162,7 +162,7 @@ public class ItemServiceImpl implements ItemService {
                 .save(CommentMapper.toComment(commentReqDto, item, user)));
     }
 
-    private List<CommentRespDto> getAllItemComments(Long itemId) {
+    public List<CommentRespDto> findAllItemComments(Long itemId) {
         List<Comment> comments = commentRepository.findAllByItemId(itemId);
 
         return comments.stream()
