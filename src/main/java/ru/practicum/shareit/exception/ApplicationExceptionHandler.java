@@ -36,13 +36,6 @@ public class ApplicationExceptionHandler {
     }
 
     @ExceptionHandler
-    @ResponseStatus(HttpStatus.CONFLICT)
-    public ErrorResponse handleEmailAlreadyExistsException(final DuplicateEmailException e) {
-        log.error("STATUS 409: {}", e.getMessage());
-        return new ErrorResponse(e.getMessage());
-    }
-
-    @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse handleUndefinedException(final Throwable e) {
         log.error("STATUS 500: {}", e.getMessage());
