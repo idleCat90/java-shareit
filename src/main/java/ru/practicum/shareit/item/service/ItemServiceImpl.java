@@ -107,8 +107,7 @@ public class ItemServiceImpl implements ItemService {
     @Transactional
     public List<ItemRespDto> findAll(Long userId, Integer from, Integer size) {
         UserDto owner = userService.findById(userId);
-        Pageable pageable = PageRequest.of(from / size, size);
-        List<Item> itemList = itemRepository.findAllByOwnerId(userId, pageable);
+        List<Item> itemList = itemRepository.findAllByOwnerId(userId, getPageable(from, size));
         List<Long> itemIdList = itemList.stream()
                 .map(Item::getId)
                 .collect(toList());
@@ -136,11 +135,10 @@ public class ItemServiceImpl implements ItemService {
     @Transactional
     public List<ItemRespDto> search(Long userId, String text, Integer from, Integer size) {
         userService.findById(userId);
-        Pageable pageable = PageRequest.of(from / size, size);
         if (text.isBlank()) {
             return Collections.emptyList();
         }
-        List<Item> itemList = itemRepository.search(text, pageable);
+        List<Item> itemList = itemRepository.search(text, getPageable(from, size));
         return itemList.stream()
                 .map(ItemMapper::toItemRespDto)
                 .collect(toList());
@@ -192,5 +190,9 @@ public class ItemServiceImpl implements ItemService {
                 .filter(bookingDTO -> bookingDTO.getStart().isAfter(time))
                 .findFirst()
                 .orElse(null);
+    }
+
+    private Pageable getPageable(Integer from, Integer size) {
+        return PageRequest.of(from / size, size);
     }
 }

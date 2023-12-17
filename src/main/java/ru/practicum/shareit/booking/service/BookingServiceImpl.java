@@ -64,7 +64,7 @@ public class BookingServiceImpl implements BookingService {
     @Override
     @Transactional
     public List<BookingRespDto> findAll(Long bookerId, String state, Integer from, Integer size) {
-        Pageable pageable = PageRequest.of(from / size, size);
+        Pageable pageable = getPageable(from, size);
         userService.findById(bookerId);
         switch (validState(state)) {
             case ALL:
@@ -99,7 +99,7 @@ public class BookingServiceImpl implements BookingService {
     @Override
     @Transactional
     public List<BookingRespDto> findAllByOwnerId(Long ownerId, String state, Integer from, Integer size) {
-        Pageable pageable = PageRequest.of(from / size, size);
+        Pageable pageable = getPageable(from, size);
         userService.findById(ownerId);
         switch (validState(state)) {
             case ALL:
@@ -172,5 +172,9 @@ public class BookingServiceImpl implements BookingService {
             throw new IllegalArgumentException("Unknown state: " + bookingState);
         }
         return state;
+    }
+
+    private Pageable getPageable(Integer from, Integer size) {
+        return PageRequest.of(from / size, size);
     }
 }

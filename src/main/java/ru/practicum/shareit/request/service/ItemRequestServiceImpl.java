@@ -2,6 +2,7 @@ package ru.practicum.shareit.request.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.exception.NotFoundException;
@@ -47,7 +48,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
     public List<ItemRequestRespDto> findAllRequests(Long userId, Integer from, Integer size) {
         UserMapper.toUser(userService.findById(userId));
         List<ItemRequest> itemRequestList = itemRequestRepository
-                .findAllByRequestorIdNotOrderByCreatedDesc(userId, PageRequest.of(from / size, size));
+                .findAllByRequestorIdNotOrderByCreatedDesc(userId, getPageable(from, size));
         return itemRequestList.stream()
                 .map(ItemRequestMapper::toItemRequestRespDto)
                 .collect(Collectors.toList());
@@ -61,5 +62,9 @@ public class ItemRequestServiceImpl implements ItemRequestService {
             throw new NotFoundException("No Item Request with id=" + requestId + " found");
         }
         return ItemRequestMapper.toItemRequestRespDto(request.get());
+    }
+
+    private Pageable getPageable(Integer from, Integer size) {
+        return PageRequest.of(from / size, size);
     }
 }
