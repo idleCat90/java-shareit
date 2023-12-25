@@ -2,12 +2,14 @@ package ru.practicum.shareit.booking;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.booking.dto.BookingReqDto;
 import ru.practicum.shareit.booking.dto.BookingRespDto;
 import ru.practicum.shareit.booking.service.BookingService;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 
 import java.util.List;
 
@@ -18,6 +20,7 @@ import static ru.practicum.shareit.item.ItemController.USER_HEADER;
 @RestController
 @RequestMapping(path = "/bookings")
 @RequiredArgsConstructor
+@Validated
 public class BookingController {
     private final BookingService bookingService;
 
@@ -45,16 +48,25 @@ public class BookingController {
 
     @GetMapping
     public List<BookingRespDto> findAll(@RequestHeader(USER_HEADER) Long userId,
-                                        @RequestParam(value = "state", defaultValue = "ALL") String bookingState) {
+                                        @RequestParam(value = "state", defaultValue = "ALL")
+                                        String bookingState,
+                                        @RequestParam(value = "from", defaultValue = "0")
+                                        @Min(0) Integer from,
+                                        @RequestParam(value = "size", defaultValue = "10")
+                                        @Min(1) Integer size) {
         log.info("GET \"/bookings?state={}\", Headers:(X-Sharer-User-Id)={}", bookingState, userId);
-        return bookingService.findAll(userId, bookingState);
+        return bookingService.findAll(userId, bookingState, from, size);
     }
 
     @GetMapping("/owner")
     public List<BookingRespDto> findAllByOwnerId(@RequestHeader(USER_HEADER) Long ownerId,
                                                  @RequestParam(value = "state", defaultValue = "ALL")
-                                                 String bookingState) {
+                                                 String bookingState,
+                                                 @RequestParam(value = "from", defaultValue = "0")
+                                                 @Min(0) Integer from,
+                                                 @RequestParam(value = "size", defaultValue = "10")
+                                                 @Min(1) Integer size) {
         log.info("GET \"/bookings/owner?state={}\", Headers:(X-Sharer-User-Id)={}", bookingState, ownerId);
-        return bookingService.findAllByOwnerId(ownerId, bookingState);
+        return bookingService.findAllByOwnerId(ownerId, bookingState, from, size);
     }
 }

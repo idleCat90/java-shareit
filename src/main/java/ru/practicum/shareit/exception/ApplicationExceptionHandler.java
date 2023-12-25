@@ -9,10 +9,12 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import javax.validation.ConstraintViolationException;
+
 @RestControllerAdvice
 @Slf4j
 public class ApplicationExceptionHandler {
-    @ExceptionHandler({MethodArgumentNotValidException.class, ValidationException.class})
+    @ExceptionHandler({MethodArgumentNotValidException.class, ValidationException.class, ConstraintViolationException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleValidationException(final Exception e) {
         log.error("STATUS 400: {}", e.getMessage());
@@ -30,13 +32,6 @@ public class ApplicationExceptionHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleNotFoundException(final NotFoundException e) {
         log.error("STATUS 404: {}", e.getMessage());
-        return new ErrorResponse(e.getMessage());
-    }
-
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.CONFLICT)
-    public ErrorResponse handleEmailAlreadyExistsException(final DuplicateEmailException e) {
-        log.error("STATUS 409: {}", e.getMessage());
         return new ErrorResponse(e.getMessage());
     }
 
