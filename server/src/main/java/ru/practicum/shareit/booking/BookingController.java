@@ -8,9 +8,6 @@ import ru.practicum.shareit.booking.dto.BookingReqDto;
 import ru.practicum.shareit.booking.dto.BookingRespDto;
 import ru.practicum.shareit.booking.service.BookingService;
 
-import javax.validation.Valid;
-import javax.validation.constraints.Min;
-
 import java.util.List;
 
 import static ru.practicum.shareit.item.ItemController.USER_HEADER;
