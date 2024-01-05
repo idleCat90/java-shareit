@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.common.Marker;
+import ru.practicum.shareit.user.dto.UserDto;
 
 @Slf4j
 @RestController

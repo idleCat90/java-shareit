@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static ru.practicum.shareit.item.ItemController.USER_HEADER;
+import static ru.practicum.shareit.common.Constants.USER_HEADER;
 
 @WebMvcTest(controllers = BookingController.class)
 public class BookingControllerTest {

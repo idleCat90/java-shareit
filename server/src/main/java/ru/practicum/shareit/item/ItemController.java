@@ -18,7 +18,6 @@ import static ru.practicum.shareit.common.Constants.USER_HEADER;
 @RequestMapping("/items")
 @RequiredArgsConstructor
 @Slf4j
-@Validated
 public class ItemController {
     private final ItemService itemService;
 
