@@ -9,10 +9,13 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-@RestControllerAdvice
+import javax.validation.ConstraintViolationException;
+
 @Slf4j
+@RestControllerAdvice
 public class ApplicationExceptionHandler {
-    @ExceptionHandler({MethodArgumentNotValidException.class, ValidationException.class})
+
+    @ExceptionHandler({MethodArgumentNotValidException.class, ConstraintViolationException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleValidationException(final Exception e) {
         log.error("STATUS 400: {}", e.getMessage());
@@ -23,13 +26,6 @@ public class ApplicationExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleBadRequest(final Exception e) {
         log.error("STATUS 400: {}", e.getMessage());
-        return new ErrorResponse(e.getMessage());
-    }
-
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponse handleNotFoundException(final NotFoundException e) {
-        log.error("STATUS 404: {}", e.getMessage());
         return new ErrorResponse(e.getMessage());
     }
 
