@@ -10,9 +10,9 @@ import ru.practicum.shareit.item.dto.ItemReqDto;
 import ru.practicum.shareit.item.dto.ItemRespDto;
 import ru.practicum.shareit.item.service.ItemService;
 
-import javax.validation.Valid;
-import javax.validation.constraints.Min;
 import java.util.List;
+
+import static ru.practicum.shareit.common.Constants.USER_HEADER;
 
 @RestController
 @RequestMapping("/items")
@@ -20,12 +20,11 @@ import java.util.List;
 @Slf4j
 @Validated
 public class ItemController {
-    public static final String USER_HEADER = "X-Sharer-User-Id";
     private final ItemService itemService;
 
     @PostMapping
-    public ItemRespDto add(@RequestHeader(USER_HEADER) long userId,
-                           @RequestBody @Valid ItemReqDto itemReqDto) {
+    public ItemRespDto add(@RequestHeader(USER_HEADER) Long userId,
+                           @RequestBody ItemReqDto itemReqDto) {
         log.info("POST \"/item\" Body={}, Headers:(X-Sharer-User-Id)={}", itemReqDto, userId);
         return itemService.add(userId, itemReqDto);
     }
@@ -33,13 +32,13 @@ public class ItemController {
     @PatchMapping("/{itemId}")
     public ItemRespDto update(@RequestHeader(USER_HEADER) Long userId,
                               @RequestBody ItemReqDto itemReqDto,
-                              @PathVariable Long itemId) {
+                              @PathVariable("itemId") Long itemId) {
         log.info("PATCH \"/item/{}\" Body={}, Headers:(X-Sharer-User-Id)={}", itemId, itemReqDto, userId);
         return itemService.update(userId, itemId, itemReqDto);
     }
 
     @GetMapping("/{itemId}")
-    public ItemRespDto findById(@RequestHeader(USER_HEADER) long userId,
+    public ItemRespDto findById(@RequestHeader(USER_HEADER) Long userId,
                                 @PathVariable("itemId") Long itemId) {
         log.info("GET \"/item/{}\" , Headers:(X-Sharer-User-Id)={}", itemId, userId);
         return itemService.findById(userId, itemId);
@@ -47,10 +46,8 @@ public class ItemController {
 
     @GetMapping
     public List<ItemRespDto> findAll(@RequestHeader(USER_HEADER) Long userId,
-                                     @RequestParam(value = "from", defaultValue = "0")
-                                     @Min(0) Integer from,
-                                     @RequestParam(value = "size", defaultValue = "10")
-                                     @Min(1) Integer size) {
+                                     @RequestParam(value = "from", defaultValue = "0") Integer from,
+                                     @RequestParam(value = "size", defaultValue = "10") Integer size) {
         log.info("GET \"/item/\", Headers:(X-Sharer-User-Id)={}", userId);
         return itemService.findAll(userId, from, size);
     }
@@ -58,17 +55,15 @@ public class ItemController {
     @GetMapping("/search")
     public List<ItemRespDto> search(@RequestHeader(USER_HEADER) Long userId,
                                     @RequestParam(name = "text") String text,
-                                    @RequestParam(value = "from", defaultValue = "0")
-                                    @Min(0) Integer from,
-                                    @RequestParam(value = "size", defaultValue = "10")
-                                    @Min(1) Integer size) {
+                                    @RequestParam(value = "from", defaultValue = "0") Integer from,
+                                    @RequestParam(value = "size", defaultValue = "10") Integer size) {
         log.info("GET \"/item/search?text={}\", Headers:(X-Sharer-User-Id)={}", text, userId);
         return itemService.search(userId, text, from, size);
     }
 
     @PostMapping("/{itemId}/comment")
     public CommentRespDto addComment(@RequestHeader(USER_HEADER) Long userId,
-                                     @Valid @RequestBody CommentReqDto commentReqDto,
+                                     @RequestBody CommentReqDto commentReqDto,
                                      @PathVariable Long itemId) {
         log.info("POST \"/item/{}/comment\", Body:{}, Headers:(X-Sharer-User-Id)={}", itemId, commentReqDto, userId);
         return itemService.addComment(userId, commentReqDto, itemId);
