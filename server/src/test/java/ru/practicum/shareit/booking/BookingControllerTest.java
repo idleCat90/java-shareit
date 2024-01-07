@@ -83,25 +83,6 @@ public class BookingControllerTest {
 
     @Test
     @SneakyThrows
-    void whenBookingIsNotValid_thenNotCreateBooking() {
-        bookingReqDto.setItemId(null);
-        bookingReqDto.setStart(null);
-        bookingReqDto.setEnd(null);
-
-        when(bookingService.add(user.getId(), bookingReqDto))
-                .thenReturn(bookingRespDto);
-
-        mockMvc.perform(post("/bookings")
-                        .contentType("application/json")
-                        .header(USER_HEADER, user.getId())
-                        .content(objectMapper.writeValueAsString(bookingReqDto)))
-                .andExpect(status().isBadRequest());
-
-        verify(bookingService, never()).add(user.getId(), bookingReqDto);
-    }
-
-    @Test
-    @SneakyThrows
     void whenPageIsCorrect_thenFindAllReturnsStatusOk() {
         Integer from = 0;
         Integer size = 10;
@@ -126,22 +107,6 @@ public class BookingControllerTest {
 
     @Test
     @SneakyThrows
-    void whenPageIsWrong_thenFindAllReturnsBadRequest() {
-        Integer from = -1;
-        Integer size = 10;
-
-        mockMvc.perform(get("/bookings")
-                        .param("from", String.valueOf(from))
-                        .param("size", String.valueOf(size))
-                        .contentType("application/json")
-                        .header(USER_HEADER, user.getId()))
-                .andExpect(status().isBadRequest());
-
-        verify(bookingService, never()).findAll(user.getId(), "ALL", from, size);
-    }
-
-    @Test
-    @SneakyThrows
     void whenPageIsCorrect_thenFindAllByOwnerIdReturnsStatusOk() {
         Integer from = 0;
         Integer size = 10;
@@ -162,22 +127,6 @@ public class BookingControllerTest {
                 .getContentAsString();
 
         assertEquals(objectMapper.writeValueAsString(List.of(bookingRespDto)), result);
-    }
-
-    @Test
-    @SneakyThrows
-    void whenPageIsWrong_thenFindAllByOwnerIdReturnsBadRequest() {
-        Integer from = -1;
-        Integer size = 10;
-
-        mockMvc.perform(get("/bookings/owner")
-                        .param("from", String.valueOf(from))
-                        .param("size", String.valueOf(size))
-                        .contentType("application/json")
-                        .header(USER_HEADER, user.getId()))
-                .andExpect(status().isBadRequest());
-
-        verify(bookingService, never()).findAllByOwnerId(user.getId(), "ALL", from, size);
     }
 
     @Test

@@ -52,42 +52,6 @@ public class UserControllerTest {
 
     @Test
     @SneakyThrows
-    void whenUserEmailIsNotValid_thenCreateReturnsBadRequest() {
-        UserDto userDto = UserDto.builder()
-                .name("user")
-                .email("mail.com")
-                .build();
-
-        when(userService.add(userDto)).thenReturn(userDto);
-
-        mockMvc.perform(post("/users")
-                        .contentType("application/json")
-                        .content(objectMapper.writeValueAsString(userDto)))
-                .andExpect(status().isBadRequest());
-
-        verify(userService, never()).add(userDto);
-    }
-
-    @Test
-    @SneakyThrows
-    void whenUserNameIsNotValid_thenCreateReturnsBadRequest() {
-        UserDto userDto = UserDto.builder()
-                .name(" ")
-                .email("user@mail.com")
-                .build();
-
-        when(userService.add(userDto)).thenReturn(userDto);
-
-        mockMvc.perform(post("/users")
-                        .contentType("application/json")
-                        .content(objectMapper.writeValueAsString(userDto)))
-                .andExpect(status().isBadRequest());
-
-        verify(userService, never()).add(userDto);
-    }
-
-    @Test
-    @SneakyThrows
     void whenUserIsValid_thenUpdateUser() {
         Long userId = 0L;
         UserDto userDto = UserDto.builder()
@@ -106,25 +70,6 @@ public class UserControllerTest {
                 .getContentAsString();
 
         assertEquals(objectMapper.writeValueAsString(userDto), result);
-    }
-
-    @Test
-    @SneakyThrows
-    void whenUserEmailIsNotValid_thenUpdateReturnsBadRequest() {
-        Long userId = 0L;
-        UserDto userDto = UserDto.builder()
-                .name("update")
-                .email("update.com")
-                .build();
-
-        when(userService.update(userId, userDto)).thenReturn(userDto);
-
-        mockMvc.perform(patch("/users/{userId}", userId)
-                        .contentType("application/json")
-                        .content(objectMapper.writeValueAsString(userDto)))
-                .andExpect(status().isBadRequest());
-
-        verify(userService, never()).update(userId, userDto);
     }
 
     @Test

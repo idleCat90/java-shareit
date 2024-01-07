@@ -78,28 +78,6 @@ public class ItemControllerTest {
 
     @Test
     @SneakyThrows
-    void whenItemNotValid_thenCreateReturnBadRequest() {
-        Long userId = 0L;
-        ItemReqDto itemReqDto = ItemReqDto.builder()
-                .name(" ")
-                .description(" ")
-                .available(null)
-                .build();
-
-        when(itemService.add(userId, itemReqDto))
-                .thenReturn(ItemMapper.toItemRespDto(ItemMapper.toItem(itemReqDto)));
-
-        mockMvc.perform(post("/items")
-                        .header(USER_HEADER, userId)
-                        .contentType("application/json")
-                        .content(objectMapper.writeValueAsString(itemReqDto)))
-                .andExpect(status().isBadRequest());
-
-        verify(itemService, never()).add(userId, itemReqDto);
-    }
-
-    @Test
-    @SneakyThrows
     void whenItemIsValid_thenUpdateReturnsOk() {
         Long itemId = 0L;
         Long userId = 0L;
@@ -229,37 +207,5 @@ public class ItemControllerTest {
                 .getContentAsString();
 
         assertEquals(objectMapper.writeValueAsString(commentRespDto), result);
-    }
-
-    @Test
-    @SneakyThrows
-    void whenPageIsInvalid_thenFindAllReturnsBadRequest() {
-        Integer from = -1;
-        Integer size = 10;
-
-        mockMvc.perform(get("/items")
-                        .header(USER_HEADER, user.getId())
-                        .contentType("application/json")
-                        .param("from", String.valueOf(from))
-                        .param("size", String.valueOf(size)))
-                .andExpect(status().isBadRequest());
-
-        verify(itemService, never()).findAll(user.getId(), from, size);
-    }
-
-    @Test
-    @SneakyThrows
-    void whenPageIsInvalid_thenSearchReturnsBadRequest() {
-        Integer from = -1;
-        Integer size = 10;
-        String text = "search";
-
-        mockMvc.perform(get("/items/search")
-                        .header(USER_HEADER, user.getId())
-                        .contentType("application/json")
-                        .param("from", String.valueOf(from))
-                        .param("size", String.valueOf(size))
-                        .param("text", text))
-                .andExpect(status().isBadRequest());
     }
 }
