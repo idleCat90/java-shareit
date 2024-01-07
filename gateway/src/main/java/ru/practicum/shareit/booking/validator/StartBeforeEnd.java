@@ -10,6 +10,8 @@ import java.lang.annotation.*;
 @Constraint(validatedBy = BookingValidator.class)
 public @interface StartBeforeEnd {
     String message = "Start should be before end or not null";
+
     Class<?>[] groups() default {};
+
     Class<? extends Payload>[] payload() default {};
 }
