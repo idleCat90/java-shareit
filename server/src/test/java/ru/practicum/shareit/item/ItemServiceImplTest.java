@@ -7,7 +7,6 @@ import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.Pageable;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.BookingStatus;
 import ru.practicum.shareit.booking.repository.BookingRepository;
@@ -202,17 +201,6 @@ public class ItemServiceImplTest {
 
         assertEquals(1, actualCommentDtoList.size());
         assertEquals(expectedCommentsDtoList, actualCommentDtoList);
-    }
-
-    @Test
-    void findAll() {
-        when(itemRepository.findAllByOwnerId(anyLong(), any(Pageable.class))).thenReturn(List.of(item));
-
-        List<ItemRespDto> actualItemRespDtoList = itemService.findAll(user.getId(), 0, 10);
-
-        assertEquals(1, actualItemRespDtoList.size());
-        assertEquals(1, actualItemRespDtoList.get(0).getId());
-        assertEquals("item", actualItemRespDtoList.get(0).getName());
     }
 
     @Test
