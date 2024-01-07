@@ -44,6 +44,6 @@ public class RequestClient extends BaseClient {
                 "size", size
         );
 
-        return get("/all?from={from]&size={size}", userId, parameters);
+        return get("/all?from={from}&size={size}", userId, parameters);
     }
 }
