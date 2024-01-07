@@ -107,7 +107,7 @@ public class ItemServiceImpl implements ItemService {
     @Transactional
     public List<ItemRespDto> findAll(Long userId, Integer from, Integer size) {
         UserDto owner = userService.findById(userId);
-        List<Item> itemList = itemRepository.findAllByOwnerId(userId, getPageable(from, size));
+        List<Item> itemList = itemRepository.findAllByOwnerIdOrderByIdAsc(userId, getPageable(from, size));
         List<Long> itemIdList = itemList.stream()
                 .map(Item::getId)
                 .collect(toList());
